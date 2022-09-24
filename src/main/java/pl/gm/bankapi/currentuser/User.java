@@ -27,13 +27,20 @@ public class User {
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$",message = "Incorrect email.")
     private String username;
     @NotBlank
-    @Size(min = 3,max=30)
+    @Size(min = 3,max=255)
     private String password;
     private String role;
     private boolean enabled;
 //    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
 //    @JoinColumn(name = "bankaccount_id")
 //    private BankAccount bankAccount;
+
+    public User(String username, String password, String role, boolean enabled) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.enabled = enabled;
+    }
 
     @Override
     public String toString() {
