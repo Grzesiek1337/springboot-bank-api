@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.gm.bankapi.model.BankAccount;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -31,9 +33,9 @@ public class User {
     private String password;
     private String role;
     private boolean enabled;
-//    @OneToOne(cascade = { CascadeType.REMOVE, CascadeType.MERGE })
-//    @JoinColumn(name = "bankaccount_id")
-//    private BankAccount bankAccount;
+    @OneToMany(cascade = { CascadeType.REMOVE, CascadeType.MERGE },fetch = FetchType.EAGER)
+    @JoinColumn(name = "bankaccount_id")
+    private List<BankAccount> bankAccounts;
 
     public User(String username, String password, String role, boolean enabled) {
         this.username = username;
