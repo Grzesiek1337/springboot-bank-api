@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
-@ToString
 public abstract class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +14,13 @@ public abstract class BankAccount {
     @Column(unique = true)
     private String accountNumber;
     private double accountBalance;
+
+    @Override
+    public String toString() {
+        return "BankAccount{" +
+                "id=" + id +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", accountBalance=" + accountBalance +
+                '}';
+    }
 }
