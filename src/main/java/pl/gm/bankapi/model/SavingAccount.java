@@ -6,20 +6,19 @@ import lombok.ToString;
 
 @Getter
 @Setter
-
 public class SavingAccount extends BankAccount{
 
-    private double interest;
+    private double accountInterest;
 
-    public SavingAccount(Long id, String accountNumber, double accountBalance, double interest) {
-        super(id, accountNumber, accountBalance);
-        this.interest = interest;
+    public SavingAccount(Long id, String accountType, String accountNumber, double accountBalance) {
+        super(id, accountType, accountNumber, accountBalance);
+        this.accountInterest = 5;
     }
 
     @Override
     public String toString() {
         return super.toString() +
-                ", interest=" + interest +
+                ", interest=" + accountInterest +
                 '}';
     }
 }
