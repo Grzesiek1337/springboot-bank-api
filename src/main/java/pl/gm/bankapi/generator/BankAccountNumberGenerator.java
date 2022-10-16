@@ -1,17 +1,14 @@
 package pl.gm.bankapi.generator;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Random;
 
-@Component
 public class BankAccountNumberGenerator {
-    private final String BANK_ID = "44440000";
-    private final String CHECK_DIGITS = "22";
 
-    private Random random = new Random();
+    private static final String BANK_ID = "44440000";
+    private static final String CHECK_DIGITS = "22";
+    private static Random random = new Random();
 
-    public  String createAccountNumber() {
+    public static   String createAccountNumber() {
         StringBuilder accountNumber = new StringBuilder();
         accountNumber.append(CHECK_DIGITS + BANK_ID);
         for(int i = 0; i <= 15;i++) {
