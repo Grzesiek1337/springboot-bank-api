@@ -1,9 +1,14 @@
 package pl.gm.bankapi.dto;
 
-import pl.gm.bankapi.model.BankAccount;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.List;
-
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
 
     private Long id;
@@ -11,5 +16,6 @@ public class UserDto {
     private String password;
     private String role;
     private boolean enabled;
-    private List<BankAccount> bankAccounts;
+    private ClientDto client;
+
 }
