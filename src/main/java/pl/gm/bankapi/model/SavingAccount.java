@@ -1,24 +1,24 @@
 package pl.gm.bankapi.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
+import javax.persistence.*;
 
 @Getter
 @Setter
-public class SavingAccount extends BankAccount{
+@NoArgsConstructor
+@Entity
+@Table(name = "saving_accounts")
+public class SavingAccount {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private double accountInterest;
-
-    public SavingAccount(Long id, String accountType, String accountNumber, double accountBalance) {
-        super(id, accountType, accountNumber, accountBalance);
-        this.accountInterest = 5;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() +
-                ", interest=" + accountInterest +
-                '}';
-    }
+    private String accountType;
+    @Column(unique = true)
+    private String accountNumber;
+    private double accountBalance;
 }
