@@ -26,6 +26,32 @@
                 <td th:if="${#fields.hasErrors('clientPassword')}" th:errors="*{clientPassword}"></td>
             </tr>
             <tr>
+                <td>First Name:</td>
+                <td><input type="text" th:field="*{clientFirstName}" /></td>
+                <td th:if="${#fields.hasErrors('clientFirstName')}" th:errors="*{clientFirstName}"></td>
+            </tr>
+            <tr>
+                <td>Last Name:</td>
+                <td><input type="text" th:field="*{clientLastName}" /></td>
+                <td th:if="${#fields.hasErrors('clientLastName')}" th:errors="*{clientLastName}"></td>
+            </tr>
+            <tr>
+                <td>Day Of Birth:</td>
+                <td><input type="date" th:field="*{clientDayOfBirth}" /></td>
+                <td th:if="${#fields.hasErrors('clientDayOfBirth')}" th:errors="*{clientDayOfBirth}"></td>
+            </tr>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
                 <td colspan="2"><button type="submit">Create</button> </td>
             </tr>
         </table>
