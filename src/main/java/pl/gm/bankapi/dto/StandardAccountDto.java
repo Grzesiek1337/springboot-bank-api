@@ -14,4 +14,12 @@ public class StandardAccountDto extends BankAccount {
     public StandardAccountDto(Long id, String accountType, String accountNumber, double accountBalance) {
         super(id, accountType, accountNumber, accountBalance);
     }
+
+    @Override
+    public String toString() {
+        return "StandardAccountDto{" +
+                super.toString() +
+                "client=" + client +
+                '}';
+    }
 }
