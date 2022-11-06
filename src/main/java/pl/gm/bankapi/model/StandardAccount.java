@@ -18,7 +18,10 @@ public class StandardAccount {
     private String accountType;
     @Column(unique = true)
     private String accountNumber;
-    private double accountBalance;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "money_id")
+    private Money accountMoney;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
