@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import pl.gm.bankapi.user.dto.RoleDto;
 import pl.gm.bankapi.user.dto.UserDto;
 import pl.gm.bankapi.user.model.Role;
-import pl.gm.bankapi.user.model.User;
 import pl.gm.bankapi.user.repository.RoleRepository;
 
 import java.util.List;
@@ -28,8 +27,7 @@ public class RoleService {
         }.getType());
     }
 
-    public int getNumberOfRoles() {
-        return roleRepository.findAll().size();
+    public boolean isRolesExist() {
+        return roleRepository.findAll().size() > 0;
     }
-
 }

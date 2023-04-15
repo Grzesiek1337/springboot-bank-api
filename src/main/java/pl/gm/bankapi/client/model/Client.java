@@ -1,9 +1,6 @@
 package pl.gm.bankapi.client.model;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import pl.gm.bankapi.account.model.BankAccount;
 import pl.gm.bankapi.user.model.User;
 
@@ -11,7 +8,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Entity
 @Table(name = "clients")

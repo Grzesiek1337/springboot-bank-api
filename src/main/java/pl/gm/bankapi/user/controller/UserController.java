@@ -1,6 +1,5 @@
 package pl.gm.bankapi.user.controller;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +10,6 @@ import pl.gm.bankapi.user.dto.UserDto;
 import pl.gm.bankapi.user.service.UserService;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/users")

@@ -1,6 +1,5 @@
 package pl.gm.bankapi.client.service;
 
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pl.gm.bankapi.client.dto.ClientDto;

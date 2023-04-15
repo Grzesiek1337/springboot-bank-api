@@ -33,7 +33,6 @@ public class DataBaseLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
     private final ClientRepository clientRepository;
     private final BankAccountRepository bankAccountRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
