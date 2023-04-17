@@ -1,4 +1,4 @@
-package pl.gm.bankapi;
+package pl.gm.bankapi.common;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,7 +11,6 @@ import pl.gm.bankapi.user.model.Role;
 import pl.gm.bankapi.user.model.User;
 import pl.gm.bankapi.user.repository.RoleRepository;
 import pl.gm.bankapi.user.repository.UserRepository;
-import pl.gm.bankapi.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -49,6 +48,10 @@ public class DataBaseLoader implements CommandLineRunner {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    /**
+     This method initializes the database with sample data for testing and development purposes.
+     It creates users with roles, clients, and bank accounts, and saves them to the respective repositories.
+     */
     @Override
     @Transactional
     public void run(String... args) throws Exception {
@@ -67,6 +70,9 @@ public class DataBaseLoader implements CommandLineRunner {
         adminRoles.add(adminRole);
         adminRoles.add(userRole);
 
+        Set<Role> userRoles = new HashSet<>();
+        userRoles.add(userRole);
+
         User admin = new User();
         admin.setUsername("aaa");
         admin.setPassword(bCryptPasswordEncoder.encode("aaa"));
@@ -82,7 +88,7 @@ public class DataBaseLoader implements CommandLineRunner {
         clientRepository.save(client);
 
         BankAccount bankAccount = new BankAccount();
-        bankAccount.setAccountNumber("000111222000");
+        bankAccount.setAccountNumber("1");
         bankAccount.setAccountType("Standard");
         bankAccount.setBankName("Money4U");
         bankAccount.setBalance(BigDecimal.valueOf(100.00));
@@ -90,11 +96,55 @@ public class DataBaseLoader implements CommandLineRunner {
         bankAccountRepository.save(bankAccount);
 
         BankAccount bankAccount2 = new BankAccount();
-        bankAccount2.setAccountNumber("000999999999");
+        bankAccount2.setAccountNumber("2");
         bankAccount2.setAccountType("Saving");
         bankAccount2.setBankName("Money4U");
         bankAccount2.setBalance(BigDecimal.valueOf(0.00));
         bankAccount2.setClient(client);
         bankAccountRepository.save(bankAccount2);
+
+        User user = new User();
+        user.setUsername("bbb");
+        user.setPassword(bCryptPasswordEncoder.encode("bbb"));
+        user.setEmail("user@example.com");
+        user.setRoles(userRoles);
+        userRepository.save(user);
+
+        Client client2 = new Client();
+        client2.setFirstName("Jan");
+        client2.setLastName("Zapałka");
+        client2.setDayOfBirth(LocalDate.of(1976,11,11));
+        client2.setUser(user);
+        clientRepository.save(client2);
+
+        BankAccount bankAccount3 = new BankAccount();
+        bankAccount3.setAccountNumber("3");
+        bankAccount3.setAccountType("Standard");
+        bankAccount3.setBankName("Money4U");
+        bankAccount3.setBalance(BigDecimal.valueOf(0.00));
+        bankAccount3.setClient(client2);
+        bankAccountRepository.save(bankAccount3);
+
+        User user2 = new User();
+        user2.setUsername("ccc");
+        user2.setPassword(bCryptPasswordEncoder.encode("ccc"));
+        user2.setEmail("user2@example.com");
+        user2.setRoles(userRoles);
+        userRepository.save(user2);
+
+        Client client3 = new Client();
+        client3.setFirstName("Jan");
+        client3.setLastName("Zapałka");
+        client3.setDayOfBirth(LocalDate.of(1948,01,24));
+        client3.setUser(user2);
+        clientRepository.save(client3);
+
+        BankAccount bankAccount4 = new BankAccount();
+        bankAccount4.setAccountNumber("4");
+        bankAccount4.setAccountType("Standard");
+        bankAccount4.setBankName("Money4U");
+        bankAccount4.setBalance(BigDecimal.valueOf(15.00));
+        bankAccount4.setClient(client3);
+        bankAccountRepository.save(bankAccount4);
     }
 }
