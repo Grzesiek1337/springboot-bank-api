@@ -6,6 +6,8 @@ import pl.gm.bankapi.account.repository.BankAccountRepository;
 import pl.gm.bankapi.money.Money;
 import pl.gm.bankapi.transfer.exception.InsufficientFundsException;
 import pl.gm.bankapi.transfer.exception.InvalidAccountNumberException;
+import pl.gm.bankapi.transfer.model.TransactionHistory;
+import pl.gm.bankapi.transfer.repository.TransactionHistoryRepository;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -17,11 +19,15 @@ import java.util.Currency;
  */
 @Service
 public class TransferService {
-    private final BankAccountRepository bankAccountRepository;
 
-    public TransferService(BankAccountRepository bankAccountRepository) {
+    private final BankAccountRepository bankAccountRepository;
+    private final TransactionHistoryRepository transactionHistoryRepository;
+
+    public TransferService(BankAccountRepository bankAccountRepository, TransactionHistoryRepository transactionHistoryRepository) {
         this.bankAccountRepository = bankAccountRepository;
+        this.transactionHistoryRepository = transactionHistoryRepository;
     }
+
     /**
      Transfers the specified amount of money from one bank account to another.
      @param fromAccountNumber the account number to transfer money from
@@ -30,7 +36,9 @@ public class TransferService {
      @param currency the currency of the money to transfer
      @throws InsufficientFundsException if the account to transfer from does not have enough funds
      @throws InvalidAccountNumberException if either of the provided account numbers is invalid
+     @creates a new TransactionHistory object and saves it in the database
      */
+
     @Transactional
     public void transferMoney(String fromAccountNumber, String toAccountNumber, Money amount, Currency currency) throws InsufficientFundsException, InvalidAccountNumberException {
         BankAccount fromAccount = bankAccountRepository.findByAccountNumber(fromAccountNumber);
@@ -55,6 +63,9 @@ public class TransferService {
 
         bankAccountRepository.save(fromAccount);
         bankAccountRepository.save(toAccount);
+
+        TransactionHistory transaction = new TransactionHistory(fromAccount, toAccount, moneyAmount);
+        transactionHistoryRepository.save(transaction);
     }
 
     /**
