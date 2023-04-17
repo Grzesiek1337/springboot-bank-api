@@ -3,6 +3,7 @@ package pl.gm.bankapi.user.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.gm.bankapi.common.PolishBankAccountGenerator;
 import pl.gm.bankapi.account.model.BankAccount;
 import pl.gm.bankapi.account.repository.BankAccountRepository;
 import pl.gm.bankapi.client.dto.BankClientDto;
@@ -17,7 +18,6 @@ import pl.gm.bankapi.user.repository.UserRepository;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -61,7 +61,7 @@ public class UserService {
         clientRepository.save(client);
 
         BankAccount bankAccount = new BankAccount();
-        bankAccount.setAccountNumber("000111222000");
+        bankAccount.setAccountNumber(PolishBankAccountGenerator.generateAccountNumber());
         bankAccount.setBankName("Money4U");
         bankAccount.setBalance(BigDecimal.valueOf(100.00));
         bankAccount.setClient(client);
@@ -72,13 +72,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-
-    public Iterable<UserDto> getAll() {
-        Iterable<User> users = userRepository.findAll();
-        return modelMapper.map(users,Iterable.class);
-    }
     public UserDto findByName(String userName) {
-        UserDto userDto = modelMapper.map(userRepository.getUserByUsername(userName),UserDto.class);
-        return userDto;
+        return modelMapper.map(userRepository.getUserByUsername(userName),UserDto.class);
     }
 }
