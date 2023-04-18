@@ -14,7 +14,7 @@
 
         <form action="#" th:action="@{/transfer/new}" th:object="${transferDto}" method="post">
 
-            <input type="hidden" th:field="*{senderAccountNumber}" />
+            <input type="hidden" th:field="*{senderAccountNumber}"/>
             <label for="from">From:</label>
             <input type="text" id="from" th:field="*{senderAccountNumber}" disabled th:value="${senderAccountNumber}" />
 
@@ -25,6 +25,7 @@
             <input type="text" id="amount" th:field="*{amount}"/>
 
             <button type="submit">Transfer</button>
+            <button type="reset" class="btn btn-secondary" th:onclick="|window.location.href='/account'|">Return</button>
 
             <div th:if="${#fields.hasErrors('*')}">
                 <p>There are errors in the form:</p>

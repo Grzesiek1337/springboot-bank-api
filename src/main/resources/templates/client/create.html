@@ -44,7 +44,7 @@
                      th:errors="*{clientDayOfBirth}"></div>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
-            <a style="color: blue" th:href="@{'/'}" class="ms-3">Return</a>
+            <button type="reset" class="btn btn-secondary" th:onclick="|window.location.href='/'|">Return</button>
         </form>
     </div>
 </div>
