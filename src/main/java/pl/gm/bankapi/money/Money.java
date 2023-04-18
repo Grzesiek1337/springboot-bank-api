@@ -15,6 +15,11 @@ public class Money implements Comparable<Money> {
     BigDecimal amount;
     Currency currency;
 
+    public Money(BigDecimal amount) {
+        this.currency = Currency.getInstance("PLN");;
+        this.amount = amount.setScale(currency.getDefaultFractionDigits(), RoundingMode.HALF_UP);
+    }
+
     /**
      * Constructs a new Money object with the specified amount and currency.
      * The amount is rounded to the appropriate number of decimal places for the currency.
