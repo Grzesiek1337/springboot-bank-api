@@ -62,8 +62,9 @@ public class UserService {
 
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountNumber(PolishBankAccountGenerator.generateAccountNumber());
+        bankAccount.setAccountType("Standard");
         bankAccount.setBankName("Money4U");
-        bankAccount.setBalance(BigDecimal.valueOf(100.00));
+        bankAccount.setBalance(BigDecimal.valueOf(0.00));
         bankAccount.setClient(client);
         bankAccountRepository.save(bankAccount);
     }
