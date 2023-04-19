@@ -8,6 +8,10 @@ import pl.gm.bankapi.user.model.User;
 
 import java.util.*;
 
+/**
+ * Custom UserDetails implementation that wraps a User object.
+ * Allows Spring Security to obtain authentication and authorization information from the User object.
+ */
 public class CurrentUserDetails implements UserDetails {
 
     private User user;
