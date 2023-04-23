@@ -39,10 +39,4 @@ public class UserController {
         }
         return "redirect:/";
     }
-
-    @GetMapping("/all")
-    @ResponseBody
-    public UserDto getAllUsers() {
-        return userService.findByName("aaa");
-    }
 }

@@ -22,7 +22,7 @@ public class CookieController {
             return "error-page";
         }
         Cookie cookie = new Cookie("cookie-consent", "true");
-        cookie.setMaxAge(60 * 60 * 24 * 365);
+        cookie.setMaxAge(3600);
         response.addCookie(cookie);
         return "redirect:/";
     }

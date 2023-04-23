@@ -69,7 +69,8 @@ public class UserService {
         bankAccountRepository.save(bankAccount);
     }
 
-    public void save(User user) {
+    public void save(UserDto userDto) {
+        User user = modelMapper.map(userDto,User.class);
         userRepository.save(user);
     }
 
