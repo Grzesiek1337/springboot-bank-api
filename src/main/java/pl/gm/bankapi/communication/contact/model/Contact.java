@@ -1,4 +1,4 @@
-package pl.gm.bankapi.contact.model;
+package pl.gm.bankapi.communication.contact.model;
 
 import lombok.Data;
 
@@ -20,4 +20,6 @@ public class Contact {
 
     @Column(length = 1000)
     private String message;
+
+    private boolean isResponseProvided;
 }

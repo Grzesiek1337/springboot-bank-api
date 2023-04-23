@@ -1,4 +1,4 @@
-package pl.gm.bankapi.contact.dto;
+package pl.gm.bankapi.communication.contact.dto;
 
 import lombok.Data;
 
@@ -24,4 +24,6 @@ public class ContactDto {
     @NotBlank
     @Size(max = 1000)
     private String message;
+
+    private boolean isResponseProvided;
 }
