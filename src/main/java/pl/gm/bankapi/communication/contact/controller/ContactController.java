@@ -1,4 +1,4 @@
-package pl.gm.bankapi.contact.controller;
+package pl.gm.bankapi.communication.contact.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.gm.bankapi.contact.dto.ContactDto;
-import pl.gm.bankapi.contact.service.ContactService;
+import pl.gm.bankapi.communication.contact.dto.ContactDto;
+import pl.gm.bankapi.communication.contact.service.ContactService;
 
 import javax.validation.Valid;
 
