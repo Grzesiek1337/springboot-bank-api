@@ -9,6 +9,11 @@
 </head>
 <body>
 <header th:insert="fragments/general.html :: header"></header>
+<div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <div class="row justify-content-center">
+        <a class="btn btn-primary btn-lg" th:href="@{'/admin/users/all'}">Show users</a>
+    </div>
+</div>
 <footer th:insert="fragments/general.html :: footer"></footer>
 </body>
 </html>
