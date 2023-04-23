@@ -7,6 +7,7 @@ import pl.gm.bankapi.account.model.BankAccount;
 import pl.gm.bankapi.account.repository.BankAccountRepository;
 import pl.gm.bankapi.client.model.Client;
 import pl.gm.bankapi.client.repository.ClientRepository;
+import pl.gm.bankapi.communication.contact.service.ContactService;
 import pl.gm.bankapi.user.model.Role;
 import pl.gm.bankapi.user.model.User;
 import pl.gm.bankapi.user.repository.RoleRepository;
@@ -34,17 +35,20 @@ public class DataBaseLoader implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final ClientRepository clientRepository;
     private final BankAccountRepository bankAccountRepository;
+    private final ContactService contactService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public DataBaseLoader(UserRepository userRepository,
                           RoleRepository roleRepository,
                           ClientRepository clientRepository,
                           BankAccountRepository bankAccountRepository,
+                          ContactService contactService,
                           BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.clientRepository = clientRepository;
         this.bankAccountRepository = bankAccountRepository;
+        this.contactService = contactService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -146,5 +150,7 @@ public class DataBaseLoader implements CommandLineRunner {
         bankAccount4.setBalance(BigDecimal.valueOf(15.00));
         bankAccount4.setClient(client3);
         bankAccountRepository.save(bankAccount4);
+
+        contactService.generateSomeContacts(8);
     }
 }
