@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -70,11 +71,22 @@ public class UserService {
     }
 
     public void save(UserDto userDto) {
-        User user = modelMapper.map(userDto,User.class);
+        User user = modelMapper.map(userDto, User.class);
         userRepository.save(user);
     }
 
+    public List<UserDto> findAll() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> modelMapper.map(user, UserDto.class))
+                .collect(Collectors.toList());
+    }
+
     public UserDto findByName(String userName) {
-        return modelMapper.map(userRepository.getUserByUsername(userName),UserDto.class);
+        return modelMapper.map(userRepository.getUserByUsername(userName), UserDto.class);
+    }
+
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 }
