@@ -25,6 +25,6 @@ public class Client {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private List<BankAccount> bankAccounts = new ArrayList<>();
 }
