@@ -151,6 +151,6 @@ public class DataBaseLoader implements CommandLineRunner {
         bankAccount4.setClient(client3);
         bankAccountRepository.save(bankAccount4);
 
-        contactService.generateSomeContacts(8);
+        contactService.generateDummyContacts(8);
     }
 }
