@@ -13,7 +13,7 @@ import pl.gm.bankapi.communication.contact.service.ContactService;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("contact")
+@RequestMapping("/contact")
 public class ContactController {
 
     private final ContactService contactService;
@@ -25,7 +25,7 @@ public class ContactController {
     @GetMapping("/new")
     public String showContactForm(Model model) {
         model.addAttribute("contact", new ContactDto());
-        return "contact/new";
+        return "communication/contact/new";
     }
 
     @PostMapping("/new")
@@ -37,9 +37,21 @@ public class ContactController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorMessage", "Invalid contact data");
             model.addAttribute("contact", contactDto);
-            return "contact/new";
+            return "communication/contact/new";
         }
-        contactService.saveContact(contactDto);
+        contactService.createContact(contactDto);
         return "redirect:/";
+    }
+
+    @GetMapping("/all-unanswered")
+    public String getAllUnansweredContacts(Model model) {
+        model.addAttribute("unansweredContactsDto", contactService.findAllUnansweredContacts());
+        return "communication/contact/list-unanswered";
+    }
+
+    @GetMapping("/all-answered")
+    public String getAllAnsweredContacts(Model model) {
+        model.addAttribute("answeredContactsDto", contactService.findAllAnsweredContacts());
+        return "communication/contact/list-answered";
     }
 }
