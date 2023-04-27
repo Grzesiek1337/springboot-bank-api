@@ -8,6 +8,7 @@ import pl.gm.bankapi.account.model.BankAccount;
 import pl.gm.bankapi.account.repository.BankAccountRepository;
 import pl.gm.bankapi.client.dto.BankClientDto;
 import pl.gm.bankapi.client.repository.ClientRepository;
+import pl.gm.bankapi.communication.email.service.EmailService;
 import pl.gm.bankapi.user.dto.UserDto;
 import pl.gm.bankapi.user.model.Role;
 import pl.gm.bankapi.user.model.User;
@@ -31,13 +32,22 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, ClientRepository clientRepository, BankAccountRepository bankAccountRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ModelMapper modelMapper) {
+    private final EmailService emailService;
+
+    public UserService(UserRepository userRepository,
+                       RoleRepository roleRepository,
+                       ClientRepository clientRepository,
+                       BankAccountRepository bankAccountRepository,
+                       BCryptPasswordEncoder bCryptPasswordEncoder,
+                       ModelMapper modelMapper,
+                       EmailService emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.clientRepository = clientRepository;
         this.bankAccountRepository = bankAccountRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.modelMapper = modelMapper;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -68,6 +78,9 @@ public class UserService {
         bankAccount.setBalance(BigDecimal.valueOf(0.00));
         bankAccount.setClient(client);
         bankAccountRepository.save(bankAccount);
+
+        /** Email sample impl */
+//        emailService.sendSimpleMessage(bankClient.getClientEmail(),"Registration account","Success!");
     }
 
     public void save(UserDto userDto) {
