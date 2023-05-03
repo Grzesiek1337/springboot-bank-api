@@ -32,4 +32,9 @@ public class ClientService {
     public void delete(long id) {
         clientRepository.deleteById(id);
     }
+
+    public ClientDto findClientByPrincipalUsername(String username) {
+        ClientDto clientDto = modelMapper.map(clientRepository.getClientByUsername(username),ClientDto.class);
+        return clientDto;
+    }
 }
