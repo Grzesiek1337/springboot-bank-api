@@ -44,7 +44,8 @@
                     <button type="reset" class="btn btn-secondary" th:onclick="|window.location.href='/loans/simulate-loan'|">Return</button>
                 </div>
             </div>
-            <table>
+            <button id="toggle-table">Show/hide payment schedule.</button>
+            <table id="payment-table">
                 <thead>
                 <tr>
                     <th>Number</th>
@@ -64,6 +65,16 @@
     </div>
 </div>
 <footer th:insert="fragments/general.html :: footer"></footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#payment-table').hide();
+
+        $('#toggle-table').click(function() {
+            $('#payment-table').toggle();
+        });
+    });
+</script>
 </body>
 </html>
 </html>
