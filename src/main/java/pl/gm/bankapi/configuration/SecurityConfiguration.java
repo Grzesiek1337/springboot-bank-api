@@ -50,6 +50,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/contact/new").permitAll()
                 .antMatchers("/contact/**").hasRole("ADMIN")
 
+                .antMatchers("/loans").permitAll()
+                .antMatchers("/loans/simulate-loan").permitAll()
+                .antMatchers("/loans/**").hasRole("USER")
+
                 .antMatchers("/account/**").hasRole("USER")
                 .antMatchers("/transfer/**").hasRole("USER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
