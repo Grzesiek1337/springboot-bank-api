@@ -16,8 +16,8 @@ This is a simple Spring Boot application that allows users to create bank accoun
 * Run the application
 # Content:
 You can access the application at http://localhost:8080/. 
-* As an unregistered user, you can browse through the bank's offers and services. Additionally, you can contact the bank through the available contact tab and u can register new bank account.
-* As a registered user,at this moment you can make money transfers between your accounts as well as to other accounts within the bank.
+* As an unregistered user, you can browse through the bank's offers and services. You can contact the bank through the available contact tab and u can register new bank account. You can simulate loan payment schedule.
+* As a registered user,at this moment you can make money transfers between your accounts as well as to other accounts within the bank. You can applicate for loan.
 # Admin features
 If you have admin privileges, you can perform the following actions:
 * View a list of all registered users.
