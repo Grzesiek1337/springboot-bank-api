@@ -52,6 +52,30 @@ public class Money implements Comparable<Money> {
         checkCurrencyMatch(other);
         return new Money(amount.subtract(other.amount), currency);
     }
+    /**
+     * Divides this Money by another Money object with the specified scale and rounding mode.
+     * @param other         the Money object to divide by
+     * @param scale         the scale of the result
+     * @param roundingMode  the rounding mode to use
+     * @return              a new Money object representing the result of the division
+     * @throws IllegalArgumentException if the currencies of the two Money objects do not match
+     */
+    public Money divide(Money other, int scale, RoundingMode roundingMode) {
+        checkCurrencyMatch(other);
+        BigDecimal result = amount.divide(other.amount, scale, roundingMode);
+        return new Money(result.setScale(scale, roundingMode), currency);
+    }
+
+    /**
+     * Multiplies this Money by another Money object.
+     * @param other         the Money object to multiply by
+     * @return              a new Money object representing the result of the multiplication
+     * @throws IllegalArgumentException if the currencies of the two Money objects do not match
+     */
+    public Money multiply(Money other) {
+        checkCurrencyMatch(other);
+        return new Money(amount.multiply(other.amount), currency);
+    }
 
     /**
      * Returns true if this Money object is less than the other Money object.
