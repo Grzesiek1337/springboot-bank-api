@@ -6,6 +6,9 @@ import pl.gm.bankapi.payment.PaymentStatus;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * A data transfer object representing a payment.
+ */
 @Data
 public class PaymentDto {
 

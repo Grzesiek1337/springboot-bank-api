@@ -5,6 +5,9 @@ import pl.gm.bankapi.payment.dto.PaymentScheduleDto;
 
 import java.math.BigDecimal;
 
+/**
+ * A data transfer object representing a loan.
+ */
 @Data public class LoanDto {
 
     private Long id;
