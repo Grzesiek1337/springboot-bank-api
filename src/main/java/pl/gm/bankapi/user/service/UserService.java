@@ -83,7 +83,7 @@ public class UserService {
 
         /** Email sample implementation */
         // Send confirmation email to the new client
-        emailService.sendSimpleMessage(bankClient.getClientEmail(),"Registration account","Success!");
+//        emailService.sendSimpleMessage(bankClient.getClientEmail(),"Registration account","Success!");
     }
 
     public void save(UserDto userDto) {
