@@ -81,4 +81,22 @@ public class NotificationService {
             notificationRepository.save(notification);
         }
     }
+
+    /***
+     Deletes notifications that are older than one week.
+     Notification date is stored as a string in the format "yyyy-MM-dd HH:mm".
+     ***/
+    public void deleteNotificationsOlderThanOneWeek() {
+        List<NotificationEntity> notifications = notificationRepository.findAll();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusWeeks(1);
+
+        for (NotificationEntity notification : notifications) {
+            LocalDateTime createdAt = LocalDateTime.parse(notification.getCreatedAt(), formatter);
+            if (createdAt.isBefore(oneWeekAgo)) {
+                // delete notification
+                notificationRepository.delete(notification);
+            }
+        }
+    }
 }
