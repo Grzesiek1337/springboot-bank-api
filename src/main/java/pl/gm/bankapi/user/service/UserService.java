@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+    // Autowired repositories and services
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ClientRepository clientRepository;
     private final BankAccountRepository bankAccountRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper modelMapper;
-
     private final EmailService emailService;
 
     public UserService(UserRepository userRepository,
@@ -52,11 +52,11 @@ public class UserService {
 
     @Transactional
     public void createClient(@Valid BankClientDto bankClient) throws Exception {
-
+        // Create user roles
         Set<Role> userRoles = new HashSet<>();
         userRoles.add(roleRepository.getRoleByName("ROLE_USER"));
 
-
+        // Create user
         User user = new User();
         user.setUsername(bankClient.getClientEmail());
         user.setPassword(bCryptPasswordEncoder.encode(bankClient.getClientPassword()));
@@ -64,6 +64,7 @@ public class UserService {
         user.setRoles(userRoles);
         userRepository.save(user);
 
+        // Create client
         Client client = new Client();
         client.setFirstName(bankClient.getClientFirstName());
         client.setLastName(bankClient.getClientLastName());
@@ -71,6 +72,7 @@ public class UserService {
         client.setUser(user);
         clientRepository.save(client);
 
+        // Create bank account
         BankAccount bankAccount = new BankAccount();
         bankAccount.setAccountNumber(PolishBankAccountGenerator.generateAccountNumber());
         bankAccount.setAccountType("Standard");
@@ -79,16 +81,19 @@ public class UserService {
         bankAccount.setClient(client);
         bankAccountRepository.save(bankAccount);
 
-        /** Email sample impl */
-//        emailService.sendSimpleMessage(bankClient.getClientEmail(),"Registration account","Success!");
+        /** Email sample implementation */
+        // Send confirmation email to the new client
+        emailService.sendSimpleMessage(bankClient.getClientEmail(),"Registration account","Success!");
     }
 
     public void save(UserDto userDto) {
+        // Map UserDto to User and save to repository
         User user = modelMapper.map(userDto, User.class);
         userRepository.save(user);
     }
 
     public List<UserDto> findAll() {
+        // Find all users and map to UserDto
         List<User> users = userRepository.findAll();
         return users.stream()
                 .map(user -> modelMapper.map(user, UserDto.class))
@@ -96,10 +101,17 @@ public class UserService {
     }
 
     public UserDto findByName(String userName) {
+        // Find user by username and map to UserDto
         return modelMapper.map(userRepository.getUserByUsername(userName), UserDto.class);
     }
 
+    public UserDto findByUsernameWithNotifications(String userName) {
+        // Find user by username and map to UserDto with notifications
+        return modelMapper.map(userRepository.findByUsernameWithNotifications(userName), UserDto.class);
+    }
+
     public void delete(Long id) {
+        // Delete user by id
         userRepository.deleteById(id);
     }
 }
