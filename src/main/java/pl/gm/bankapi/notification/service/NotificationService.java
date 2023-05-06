@@ -57,4 +57,28 @@ public class NotificationService {
         return notificationDtos.stream()
                 .map(n -> modelMapper.map(n, NotificationDto.class)).collect(Collectors.toList());
     }
+
+    /**
+     * Sends a notification to all users by creating a new notification entity for each user in the database.
+     * @param notificationDto The notification data transfer object containing the message to send to all users.
+     */
+    public void sendNotificationToAllUsers(NotificationDto notificationDto) {
+
+        // Retrieve all users from the database
+        List<User> users = userRepository.findAll();
+
+        // Format the date and time for the notification creation time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
+        // Create a new notification for each user and save it to the database
+        for(User user : users) {
+
+            NotificationEntity notification = new NotificationEntity();
+            notification.setMessage(notificationDto.getMessage());
+            notification.setCreatedAt(LocalDateTime.now().format(formatter));
+            notification.setUser(user);
+
+            notificationRepository.save(notification);
+        }
+    }
 }
