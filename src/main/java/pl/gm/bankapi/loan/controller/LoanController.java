@@ -13,6 +13,7 @@ import pl.gm.bankapi.loan.dto.LoanSimulateFormDto;
 import pl.gm.bankapi.loan.dto.LoanSimulateResultDto;
 import pl.gm.bankapi.loan.interest.InterestRate;
 import pl.gm.bankapi.loan.service.LoanService;
+import pl.gm.bankapi.notification.service.NotificationService;
 import pl.gm.bankapi.payment.dto.PaymentScheduleDto;
 import pl.gm.bankapi.payment.service.PaymentService;
 import pl.gm.bankapi.user.currentuser.CurrentUserDetails;
@@ -27,12 +28,18 @@ public class LoanController {
     private final ClientService clientService;
     private final PaymentService paymentService;
     private final EmailService emailService;
+    private final NotificationService notificationService;
 
-    public LoanController(LoanService loanService, ClientService clientService, PaymentService paymentService, EmailService emailService) {
+    public LoanController(LoanService loanService,
+                          ClientService clientService,
+                          PaymentService paymentService,
+                          EmailService emailService,
+                          NotificationService notificationService) {
         this.loanService = loanService;
         this.clientService = clientService;
         this.paymentService = paymentService;
         this.emailService = emailService;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -58,8 +65,8 @@ public class LoanController {
     /**
      * Process the loan simulator form and display the simulated loan result.
      * @param loanSimulateDto The LoanSimulateFormDto object representing the submitted form data.
-     * @param bindingResult The binding result object to check for form validation errors.
-     * @param model The model object to hold the loan simulator results.
+     * @param bindingResult   The binding result object to check for form validation errors.
+     * @param model           The model object to hold the loan simulator results.
      * @return The name of the view to display the simulated loan result.
      */
     @PostMapping("/simulate-loan")
@@ -129,6 +136,7 @@ public class LoanController {
             return "loan/application-loan-form";
         }
         loanService.applyForLoan(loanApplication);
+        notificationService.addNotificationToUser(loanApplication.getUserName(),"Your loan application has been sent, awaiting confirmation.");
         // emailService.sendSimpleMessage(loanApplication.getUserName(),"Confirmation of the loan application", "Message");
         return "index";
     }
