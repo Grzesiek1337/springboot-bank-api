@@ -1,8 +1,8 @@
-package pl.gm.bankapi.notification.repository;
+package pl.gm.bankapi.communication.notification.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pl.gm.bankapi.notification.model.NotificationEntity;
+import pl.gm.bankapi.communication.notification.model.NotificationEntity;
 import pl.gm.bankapi.user.model.User;
 
 import java.util.List;

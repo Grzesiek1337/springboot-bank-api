@@ -1,8 +1,8 @@
-package pl.gm.bankapi.notification.cleaner;
+package pl.gm.bankapi.communication.notification.cleaner;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import pl.gm.bankapi.notification.service.NotificationService;
+import pl.gm.bankapi.communication.notification.service.NotificationService;
 
 /**
  * A component that schedules the cleanup of old notifications every Sunday at midnight.

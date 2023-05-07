@@ -1,7 +1,7 @@
 package pl.gm.bankapi.user.model;
 
 import lombok.Data;
-import pl.gm.bankapi.notification.model.NotificationEntity;
+import pl.gm.bankapi.communication.notification.model.NotificationEntity;
 
 import javax.persistence.*;
 

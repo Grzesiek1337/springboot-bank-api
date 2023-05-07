@@ -13,7 +13,7 @@ import pl.gm.bankapi.loan.dto.LoanSimulateFormDto;
 import pl.gm.bankapi.loan.dto.LoanSimulateResultDto;
 import pl.gm.bankapi.loan.interest.InterestRate;
 import pl.gm.bankapi.loan.service.LoanService;
-import pl.gm.bankapi.notification.service.NotificationService;
+import pl.gm.bankapi.communication.notification.service.NotificationService;
 import pl.gm.bankapi.payment.dto.PaymentScheduleDto;
 import pl.gm.bankapi.payment.service.PaymentService;
 import pl.gm.bankapi.user.currentuser.CurrentUserDetails;

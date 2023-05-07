@@ -1,4 +1,4 @@
-package pl.gm.bankapi.notification.model;
+package pl.gm.bankapi.communication.notification.model;
 
 import lombok.Data;
 import pl.gm.bankapi.user.model.User;

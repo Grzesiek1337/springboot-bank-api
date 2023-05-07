@@ -1,10 +1,10 @@
-package pl.gm.bankapi.notification.service;
+package pl.gm.bankapi.communication.notification.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import pl.gm.bankapi.notification.dto.NotificationDto;
-import pl.gm.bankapi.notification.model.NotificationEntity;
-import pl.gm.bankapi.notification.repository.NotificationRepository;
+import pl.gm.bankapi.communication.notification.dto.NotificationDto;
+import pl.gm.bankapi.communication.notification.model.NotificationEntity;
+import pl.gm.bankapi.communication.notification.repository.NotificationRepository;
 import pl.gm.bankapi.user.model.User;
 import pl.gm.bankapi.user.repository.UserRepository;
 

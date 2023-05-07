@@ -1,13 +1,12 @@
-package pl.gm.bankapi.notification.controller;
+package pl.gm.bankapi.communication.notification.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pl.gm.bankapi.communication.contact.dto.ContactDto;
-import pl.gm.bankapi.notification.dto.NotificationDto;
-import pl.gm.bankapi.notification.service.NotificationService;
+import pl.gm.bankapi.communication.notification.dto.NotificationDto;
+import pl.gm.bankapi.communication.notification.service.NotificationService;
 import pl.gm.bankapi.user.currentuser.CurrentUserDetails;
 import pl.gm.bankapi.user.model.User;
 

@@ -3,7 +3,7 @@ package pl.gm.bankapi.user.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.gm.bankapi.notification.dto.NotificationDto;
+import pl.gm.bankapi.communication.notification.dto.NotificationDto;
 
 import java.util.ArrayList;
 import java.util.List;

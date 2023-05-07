@@ -1,4 +1,4 @@
-package pl.gm.bankapi.notification.dto;
+package pl.gm.bankapi.communication.notification.dto;
 
 import lombok.Data;
 import pl.gm.bankapi.user.dto.UserDto;
