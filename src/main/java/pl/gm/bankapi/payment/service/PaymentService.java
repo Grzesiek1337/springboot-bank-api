@@ -46,7 +46,6 @@ public class PaymentService {
             payment.setAmount(monthlyPayment.getAmount());
             payment.setDueDate(paymentDate);
             payment.setStatus(PaymentStatus.PENDING);
-            payment.setPaymentSchedule(paymentSchedule);
             paymentDtos.add(payment);
             paymentDate = paymentDate.plusMonths(1);
         }
