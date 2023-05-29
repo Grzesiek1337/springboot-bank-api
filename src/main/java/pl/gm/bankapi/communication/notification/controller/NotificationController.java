@@ -67,4 +67,16 @@ public class NotificationController {
         notificationService.sendNotificationToAllUsers(notificationDto);
         return "redirect:/admin";
     }
+
+    /**
+     * This method handles the request to delete a notification with the given ID.
+     * After deleting the notification, it redirects the user to the notifications list page.
+     * @param id the ID of the notification to delete
+     * @return a redirect to the notifications list page
+     */
+    @GetMapping("/delete/{id}")
+    public String deleteNotification(@PathVariable Long id) {
+        notificationService.deleteNotificationById(id);
+        return "redirect:/notifications/list";
+    }
 }
