@@ -1,6 +1,7 @@
 package pl.gm.bankapi.account.dto;
 
 import lombok.Data;
+import pl.gm.bankapi.client.dto.ClientDto;
 
 import java.math.BigDecimal;
 
@@ -12,5 +13,5 @@ public class BankAccountDto {
     private String accountType;
     private String bankName;
     private BigDecimal balance;
-
+    private ClientDto client;
 }
