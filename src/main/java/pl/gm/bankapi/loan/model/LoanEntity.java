@@ -1,6 +1,7 @@
 package pl.gm.bankapi.loan.model;
 
 import lombok.Data;
+import pl.gm.bankapi.account.model.BankAccount;
 import pl.gm.bankapi.payment.model.PaymentScheduleEntity;
 
 import javax.persistence.*;
@@ -17,9 +18,12 @@ public class LoanEntity {
     private String owner;
     private BigDecimal amount;
     private BigDecimal remainsToPaid;
-    private BigDecimal monthlyPayments;
     private int paymentTerms;
 
     @OneToOne(mappedBy = "loan", cascade = CascadeType.ALL)
     private PaymentScheduleEntity paymentSchedule;
+
+    @ManyToOne
+    @JoinColumn(name = "bank_account_id")
+    private BankAccount bankAccount;
 }
