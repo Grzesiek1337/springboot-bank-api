@@ -2,9 +2,12 @@ package pl.gm.bankapi.account.model;
 
 import lombok.Data;
 import pl.gm.bankapi.client.model.Client;
+import pl.gm.bankapi.loan.model.LoanEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,5 +32,8 @@ public class BankAccount {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+
+    @OneToMany(mappedBy = "bankAccount", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    private List<LoanEntity> loans = new ArrayList<>();
 
 }
