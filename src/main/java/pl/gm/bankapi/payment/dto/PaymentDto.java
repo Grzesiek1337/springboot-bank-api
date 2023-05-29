@@ -17,5 +17,4 @@ public class PaymentDto {
     private BigDecimal amount;
     private LocalDate dueDate;
     private PaymentStatus status;
-    private PaymentScheduleDto paymentSchedule;
 }
