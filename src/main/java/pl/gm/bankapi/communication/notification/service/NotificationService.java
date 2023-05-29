@@ -99,4 +99,11 @@ public class NotificationService {
             }
         }
     }
+
+    /***
+     Deletes notification by given id.
+     ***/
+    public void deleteNotificationById(Long notificationId) {
+        notificationRepository.deleteById(notificationId);
+    }
 }
