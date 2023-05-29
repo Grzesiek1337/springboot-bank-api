@@ -26,6 +26,7 @@ If you have admin privileges, you can perform the following actions:
 * Respond to a contact request.
 * View a list of contacts that have already received a response.
 * Send notification to all users.
+* Accept the loan application.
 * Coming soon...
 # Security:
 I use BCryptEncoder to hash passwords for added security. This ensures that all passwords are encrypted and not stored in plain text.
