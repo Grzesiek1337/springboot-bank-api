@@ -1,7 +1,6 @@
 package pl.gm.bankapi.payment.dto;
 
 import lombok.Data;
-import pl.gm.bankapi.loan.dto.LoanDto;
 
 import java.util.List;
 
@@ -9,7 +8,5 @@ import java.util.List;
 public class PaymentScheduleDto {
 
     private Long id;
-    private LoanDto loan;
     private List<PaymentDto> payments;
-
 }
