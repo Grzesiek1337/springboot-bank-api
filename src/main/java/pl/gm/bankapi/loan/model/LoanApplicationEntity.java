@@ -20,6 +20,7 @@ public class LoanApplicationEntity {
     private LocalDate dayOfBirth;
     private BigDecimal interestRate;
     private BigDecimal requestedLoanAmount;
+    private Long requestedAccountId;
     private BigDecimal clientPayment;
     private BigDecimal clientExpenses;
     private BigDecimal clientFinancialObligations;
