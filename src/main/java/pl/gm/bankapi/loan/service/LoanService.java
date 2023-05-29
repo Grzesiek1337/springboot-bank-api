@@ -2,28 +2,53 @@ package pl.gm.bankapi.loan.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import pl.gm.bankapi.account.dto.BankAccountDto;
+import pl.gm.bankapi.account.model.BankAccount;
+import pl.gm.bankapi.account.repository.BankAccountRepository;
 import pl.gm.bankapi.loan.dto.LoanApplicationDto;
+import pl.gm.bankapi.loan.dto.LoanDto;
 import pl.gm.bankapi.loan.dto.LoanSimulateFormDto;
 import pl.gm.bankapi.loan.dto.LoanSimulateResultDto;
 import pl.gm.bankapi.loan.model.LoanApplicationEntity;
+import pl.gm.bankapi.loan.model.LoanEntity;
 import pl.gm.bankapi.loan.repository.LoanApplicationRepository;
 import pl.gm.bankapi.loan.repository.LoanRepository;
 import pl.gm.bankapi.money.Money;
 import pl.gm.bankapi.payment.PaymentCalculator;
+import pl.gm.bankapi.payment.dto.PaymentScheduleDto;
+import pl.gm.bankapi.payment.model.PaymentEntity;
+import pl.gm.bankapi.payment.model.PaymentScheduleEntity;
+import pl.gm.bankapi.payment.repository.PaymentRepository;
+import pl.gm.bankapi.payment.repository.PaymentScheduleRepository;
+
+import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoanService {
 
     private final LoanRepository loanRepository;
     private final LoanApplicationRepository loanApplicationRepository;
+    private final PaymentRepository paymentRepository;
+    private final PaymentScheduleRepository paymentScheduleRepository;
+    private final BankAccountRepository bankAccountRepository;
 
     private final ModelMapper modelMapper;
 
-    public LoanService(LoanRepository loanRepository, LoanApplicationRepository loanApplicationRepository, ModelMapper modelMapper) {
+    public LoanService(LoanRepository loanRepository,
+                       LoanApplicationRepository loanApplicationRepository,
+                       PaymentRepository paymentRepository,
+                       PaymentScheduleRepository paymentScheduleRepository,
+                       BankAccountRepository bankAccountRepository,
+                       ModelMapper modelMapper) {
         this.loanRepository = loanRepository;
         this.loanApplicationRepository = loanApplicationRepository;
+        this.paymentRepository = paymentRepository;
+        this.paymentScheduleRepository = paymentScheduleRepository;
+        this.bankAccountRepository = bankAccountRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -123,5 +148,61 @@ public class LoanService {
 
         // If none of the above conditions are met, the client is creditworthy.
         return true;
+    }
+
+    /**
+     * Retrieves all loan applications.
+     * @return a list of loan application DTOs
+     */
+    public List<LoanApplicationDto> getAllLoanApplications() {
+        List<LoanApplicationEntity> loanApplications = loanApplicationRepository.findAll();
+        return loanApplications.stream()
+                .map(application -> modelMapper.map(application, LoanApplicationDto.class))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Retrieves a loan application by its ID.
+     * @param id the ID of the loan application
+     * @return the loan application DTO
+     * @throws EntityNotFoundException if the loan application is not found
+     */
+    public LoanApplicationDto getLoanApplicationById(Long id) {
+        LoanApplicationEntity loanApplicationEntity = loanApplicationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Loan application not found with id " + id));
+        return modelMapper.map(loanApplicationEntity, LoanApplicationDto.class);
+    }
+
+    /**
+     * Creates a new loan based on the provided loan details, payment schedule, and associated bank account.
+     * @param loanDto            the DTO containing loan details
+     * @param paymentScheduleDto the DTO containing payment schedule details
+     * @param bankAccountDto     the DTO containing bank account details
+     */
+    public void createLoan(LoanDto loanDto, PaymentScheduleDto paymentScheduleDto, BankAccountDto bankAccountDto) {
+        // Convert loan amount to Money object
+        Money moneyAmount = new Money(loanDto.getAmount());
+
+        // Update bank account balance with the loan amount
+        BankAccount bankAccount = modelMapper.map(bankAccountDto, BankAccount.class);
+        bankAccount.setBalance(bankAccount.getBalance().add(moneyAmount.getAmount()));
+
+        // Create and save the loan entity
+        LoanEntity loan = modelMapper.map(loanDto, LoanEntity.class);
+        loan.setBankAccount(bankAccount);
+        loanRepository.save(loan);
+
+        // Create and save the payment schedule entity
+        PaymentScheduleEntity paymentSchedule = modelMapper.map(paymentScheduleDto, PaymentScheduleEntity.class);
+        paymentSchedule.setLoan(loan);
+        paymentScheduleRepository.save(paymentSchedule);
+
+        // Save the individual payment entities
+        List<PaymentEntity> paymentEntities = paymentSchedule.getPayments();
+        paymentEntities.forEach(p -> p.setPaymentSchedule(paymentSchedule));
+        paymentEntities.forEach(paymentRepository::save);
+
+        // Save the updated bank account
+        bankAccountRepository.save(bankAccount);
     }
 }
