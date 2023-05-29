@@ -2,10 +2,7 @@ package pl.gm.bankapi.loan.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -17,6 +14,7 @@ import java.time.LocalDate;
 @Data
 public class LoanApplicationDto {
 
+    private Long id;
     private String userName;
     private String firstName;
     private String lastName;
@@ -25,6 +23,8 @@ public class LoanApplicationDto {
     @Digits(integer=10, fraction=2)
     @Min(value=500, message="Requested loan amount must be at least 500.")
     private BigDecimal requestedLoanAmount;
+    @NotNull
+    private Long requestedAccountId;
     @Digits(integer=10, fraction=2)
     private BigDecimal clientPayment;
     @Digits(integer=10, fraction=2)
