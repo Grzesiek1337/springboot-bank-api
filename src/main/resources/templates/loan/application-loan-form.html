@@ -11,7 +11,7 @@
 <header th:insert="fragments/general.html :: header"></header>
 <div class="container">
     <div class="m-5 p-5">
-        <form action="#" th:action="@{/loans/applicate-for-loan}" th:object="${loanApplication}" method="post">
+        <form action="#" th:action="@{/loans/application-for-loan}" th:object="${loanApplication}" method="post">
             <div class="d-flex">
                 <div>
                     <div>
@@ -42,6 +42,16 @@
                     </div>
                 </div>
                 <div>
+                    <div>
+                        <label for="requestedLoanAmount" class="form-label">Requested Account?</label>
+                        <select th:field="*{requestedAccountId}">
+                            <option th:each="account : ${clientAccounts}"
+                                    th:text="${account}"
+                                    th:value="${account.id}">
+                        </select>
+                        <div th:if="${#fields.hasErrors('requestedAccountId')}"
+                             th:errors="*{requestedAccountId}"></div>
+                    </div>
                     <div>
                         <label for="requestedLoanAmount" class="form-label">Loan amount?</label>
                         <input type="number" class="form-control" id="requestedLoanAmount"
