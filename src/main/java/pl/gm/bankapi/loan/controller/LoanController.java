@@ -5,10 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pl.gm.bankapi.account.dto.BankAccountDto;
+import pl.gm.bankapi.account.service.BankAccountService;
 import pl.gm.bankapi.client.dto.ClientDto;
 import pl.gm.bankapi.client.service.ClientService;
 import pl.gm.bankapi.communication.email.service.EmailService;
 import pl.gm.bankapi.loan.dto.LoanApplicationDto;
+import pl.gm.bankapi.loan.dto.LoanDto;
 import pl.gm.bankapi.loan.dto.LoanSimulateFormDto;
 import pl.gm.bankapi.loan.dto.LoanSimulateResultDto;
 import pl.gm.bankapi.loan.interest.InterestRate;
@@ -18,7 +21,9 @@ import pl.gm.bankapi.payment.dto.PaymentScheduleDto;
 import pl.gm.bankapi.payment.service.PaymentService;
 import pl.gm.bankapi.user.currentuser.CurrentUserDetails;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/loans")
@@ -29,17 +34,20 @@ public class LoanController {
     private final PaymentService paymentService;
     private final EmailService emailService;
     private final NotificationService notificationService;
+    private final BankAccountService bankAccountService;
 
     public LoanController(LoanService loanService,
                           ClientService clientService,
                           PaymentService paymentService,
                           EmailService emailService,
-                          NotificationService notificationService) {
+                          NotificationService notificationService,
+                          BankAccountService bankAccountService) {
         this.loanService = loanService;
         this.clientService = clientService;
         this.paymentService = paymentService;
         this.emailService = emailService;
         this.notificationService = notificationService;
+        this.bankAccountService = bankAccountService;
     }
 
     /**
@@ -100,9 +108,13 @@ public class LoanController {
     }
 
     /**
-     * Render the loan application form
+     * Renders the loan application form.
+     *
+     * @param currentUserDetails the details of the currently authenticated user
+     * @param model              the model object for the view
+     * @return the view name for the loan application form
      */
-    @GetMapping("/applicate-for-loan")
+    @GetMapping("/application-for-loan")
     public String applicateLoanForm(@AuthenticationPrincipal CurrentUserDetails currentUserDetails, Model model) {
         // Get the client information and set default interest rate
         String principalUsername = currentUserDetails.getUsername();
@@ -115,8 +127,10 @@ public class LoanController {
         loanApplication.setDayOfBirth(client.getDayOfBirth());
         loanApplication.setInterestRate(InterestRate.ACTUAL.getRate());
 
-        // Add the form to the model
+        // Add the form and client accounts to the model
         model.addAttribute("loanApplication", loanApplication);
+        List<BankAccountDto> clientAccounts = bankAccountService.getAccountsByUsername(currentUserDetails.getUsername());
+        model.addAttribute("clientAccounts", clientAccounts);
 
         // Render the loan application form
         return "loan/application-loan-form";
@@ -125,7 +139,7 @@ public class LoanController {
     /**
      * Submit the loan application form and return to the index view
      */
-    @PostMapping("/applicate-for-loan")
+    @PostMapping("/application-for-loan")
     public String submitApplicationLoanForm(
             @Valid @ModelAttribute("loanApplication") LoanApplicationDto loanApplication,
             BindingResult bindingResult,
@@ -136,8 +150,80 @@ public class LoanController {
             return "loan/application-loan-form";
         }
         loanService.applyForLoan(loanApplication);
-        notificationService.addNotificationToUser(loanApplication.getUserName(),"Your loan application has been sent, awaiting confirmation.");
+        notificationService.addNotificationToUser(loanApplication.getUserName(), "Your loan application has been sent, awaiting confirmation.");
         // emailService.sendSimpleMessage(loanApplication.getUserName(),"Confirmation of the loan application", "Message");
+        return "index";
+    }
+
+    /**
+     * Retrieves all loan applications.
+     * @return a list of loan application DTOs
+     */
+    @GetMapping("/applications")
+    @ResponseBody
+    public List<LoanApplicationDto> getApplications() {
+        return loanService.getAllLoanApplications();
+    }
+
+    /**
+     * Retrieves the list of loan applications and renders the application list view.
+     * @param model the model object for the view
+     * @return the view name for the loan application list
+     */
+    @GetMapping("/applications/list")
+    public String getApplicationsList(Model model) {
+        model.addAttribute("loanApplications", loanService.getAllLoanApplications());
+        return "loan/application-list";
+    }
+
+    /**
+     * Accepts a loan application with the given application ID and renders the application acceptance view.
+     * @param applicationId the ID of the loan application to accept
+     * @param model         the model object for the view
+     * @return the view name for the loan application acceptance
+     */
+    @GetMapping("/applications/accept/{applicationId}")
+    public String acceptLoanApplication(@PathVariable("applicationId") Long applicationId, Model model) {
+        LoanApplicationDto loanApplicationDto = loanService.getLoanApplicationById(applicationId);
+        model.addAttribute("loanApplication", loanApplicationDto);
+        return "loan/application-accept";
+    }
+
+    /**
+     * Confirms a loan application with the given application ID and processes the loan approval.
+     * @param applicationId the ID of the loan application to confirm
+     * @param model         the model object for the view
+     * @return the view name for the confirmation page
+     */
+    @GetMapping("/applications/confirm/{applicationId}")
+    @Transactional
+    public String confirmLoanApplication(@PathVariable("applicationId") Long applicationId, Model model) {
+        // Retrieve the loan application and associated bank account
+        LoanApplicationDto loanApplicationDto = loanService.getLoanApplicationById(applicationId);
+        BankAccountDto bankAccountDto = bankAccountService.getAccountById(loanApplicationDto.getRequestedAccountId());
+
+        // Generate the payment schedule for the requested loan amount, interest rate, and payment terms
+        PaymentScheduleDto paymentScheduleDto = paymentService.createPaymentScheduleDto(
+                loanApplicationDto.getRequestedLoanAmount(),
+                loanApplicationDto.getInterestRate(),
+                loanApplicationDto.getPaymentTerms()
+        );
+
+        // Create a new loan based on the loan application and payment schedule
+        LoanDto loanDto = new LoanDto();
+        loanDto.setOwner(loanApplicationDto.getUserName())
+                .setAmount(loanApplicationDto.getRequestedLoanAmount())
+                .setRemainsToPaid(loanApplicationDto.getRequestedLoanAmount())
+                .setPaymentTerms(loanApplicationDto.getPaymentTerms());
+
+        loanService.createLoan(loanDto, paymentScheduleDto, bankAccountDto);
+
+        // Add a notification to the user
+        notificationService.addNotificationToUser(loanApplicationDto.getUserName(), "Your loan application has been accepted!");
+
+        // Send an email notification (if required)
+        // emailService.sendSimpleMessage(loanApplication.getUserName(),"Loan", "Message");
+
         return "index";
     }
 }
