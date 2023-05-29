@@ -52,7 +52,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/loans").permitAll()
                 .antMatchers("/loans/simulate-loan").permitAll()
-                .antMatchers("/loans/**").hasRole("USER")
+                .antMatchers("/loans/application-for-loan").hasRole("USER")
+                .antMatchers("/loans/applications").hasRole("ADMIN")
 
                 .antMatchers("/notifications/**").hasRole("USER")
                 .antMatchers("/notifications/send-to-all").hasRole("ADMIN")
